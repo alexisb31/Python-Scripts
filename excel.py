@@ -6,13 +6,13 @@ import pandas as pd
 # CONFIGURATION
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_/folders/' 
 HEADERS = {
-    'Authorization': 'Bearer 0954a901-ed59-48c2-aea2-d2953226941a',
+   'Authorization': 'Bearer 5d37ecb0-19fc-4003-bf6a-8e2994f15434',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',
 }
 
-FILE_NAME = 'folders_list.xlsx'
+FILE_NAME = 'liste_dossierAPIDGP.xlsx'
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

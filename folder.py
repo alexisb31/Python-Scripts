@@ -4,10 +4,10 @@ import logging
 
 # CONFIG
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
-PARENT_FOLDER_ID = '23ed693759b441f68b779a8bc1800f10' 
-DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\OneTech\SUPPORT ODS\wiki'
+PARENT_FOLDER_ID = '544fc07d8710458f878e9395ee87b3fe' 
+DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\CSI et ODQ\Scripts'
 HEADERS = {
-    'Authorization': 'Bearer 35806eb0-ebbb-4f25-941c-17d11118e10c',
+    'Authorization': 'Bearer 5d37ecb0-19fc-4003-bf6a-8e2994f15434',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',

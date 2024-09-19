@@ -5,11 +5,11 @@ import logging
 
 # CONFIGURATION
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
-FOLDER_ID = 'c5c9cec4905445b2b251ff14d65d442a'
+FOLDER_ID = '7ade87100f624d5ea664ea6ca5b47be8'
 
-DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Résilience\4 Reconstruction\Scénario Rançongiciel\Ressources'
+DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\CSI et ODQ\Scripts\ScriptAD_5-12'
 HEADERS = {
-    'Authorization': 'Bearer 34f76dce-3cbc-4aee-a930-8640cd49090b',
+    'Authorization': 'Bearer f8d25857-8bce-4326-b8f9-61934e7c6b1b',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',  
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',
@@ -20,6 +20,7 @@ LOG_FILE = 'uploaded_files.log'
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
+
 def calculate_sha256(file_path):
     sha256_hash = hashlib.sha256()
     with open(file_path, "rb") as f:
@@ -27,19 +28,24 @@ def calculate_sha256(file_path):
             sha256_hash.update(byte_block)
     return sha256_hash.hexdigest()
 
+
+
 def load_uploaded_files(log_file):
    
     if not os.path.exists(log_file):
         return set()
-
+    
     with open(log_file, 'r') as f:
         return set(line.strip() for line in f)
     
+
 
 def save_uploaded_file(log_file, file_hash):
   
     with open(log_file, 'a') as f:
         f.write(f"{file_hash}\n")
+
+
 
 def upload_file(file_path, folder_id, uploaded_files):
     try:
@@ -78,6 +84,8 @@ def upload_file(file_path, folder_id, uploaded_files):
         logging.error(f'Network error occurred while uploading file {file_path}: {e}')
     except Exception as e:
         logging.error(f'Error uploading file {file_path}: {e}')
+
+
 
 def process_directory(root_dir, folder_id):
     try:
