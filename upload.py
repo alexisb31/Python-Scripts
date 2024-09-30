@@ -3,13 +3,14 @@ import hashlib
 import requests
 import logging
 
+
 # CONFIGURATION
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
-FOLDER_ID = '16c3a384bd574c039290b51739f339b5'
+FOLDER_ID = '9188ea8d478d442ab91af4e461923bcf'
 
-DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\CSI et ODQ\Scripts\ScriptAZAD_1-3O'
+DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Books de crise (hors PCA)\SCTS\Ressources complémentaires\crise securité'
 HEADERS = {
-    'Authorization': 'Bearer c31a27c3-a6d8-4139-bd19-7e5688c9ab92',
+    'Authorization': 'Bearer 079ff320-85d2-4550-872e-d33b2ffb695f',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',  
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',
