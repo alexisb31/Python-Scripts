@@ -52,14 +52,13 @@ def upload_file(file_path, folder_id, uploaded_files):
     try:
         file_hash = calculate_sha256(file_path)
 
-        
         if file_hash in uploaded_files:
-            logging.info(f"File already uploaded, skipping: {os.path.basename(file_path)}")
+            logging.info(f"Déjà upload, téléchargement du fichier suivant : {os.path.basename(file_path)}")
             return
         file_size = os.path.getsize(file_path)
         file_name = os.path.basename(file_path)
         if file_name in ['.DS_Store', 'Thumbs.db'] or file_name.startswith('._'):
-            logging.warning(f"Skipping system file: {file_name}")
+            logging.warning(f"non prise en charge du format : {file_name}")
             return
         with open(file_path, 'rb') as file:
             files = {
@@ -70,21 +69,21 @@ def upload_file(file_path, folder_id, uploaded_files):
                 'filename': (file_name, file, 'application/octet-stream')  
             }
 
-            logging.info(f"Uploading file: {file_name} to folder ID: {folder_id}")
+            logging.info(f"fichier en téléchrgmt: {file_name} vers le fichier: {folder_id}")
 
             upload_url = f'{API_URL_BASE}/documents?folder_id={folder_id}'
             response = requests.post(upload_url, headers=HEADERS, files=files)
 
             if response.status_code == 200:
-                logging.info(f'Successfully uploaded {file_name}')
+                logging.info(f'upload avec succès {file_name}')
                 save_uploaded_file(LOG_FILE, file_hash) 
             else:
-                logging.error(f'Failed to upload {file_name}. Status code: {response.status_code}')
+                logging.error(f'echec d/upload {file_name}. Status code: {response.status_code}')
                 logging.error('Response: %s', response.json())
     except requests.exceptions.RequestException as e:
-        logging.error(f'Network error occurred while uploading file {file_path}: {e}')
+        logging.error(f'erreur internet {file_path}: {e}')
     except Exception as e:
-        logging.error(f'Error uploading file {file_path}: {e}')
+        logging.error(f'Erreur fichier upload {file_path}: {e}')
 
 
 
