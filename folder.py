@@ -7,11 +7,12 @@ API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
 PARENT_FOLDER_ID = '10ef3576633c4b53b58ea1c62841573b' 
 DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\CSI et ODQ\Scripts\ScriptAD_5-5'
 HEADERS = {
-    'Authorization': 'Bearer c31a27c3-a6d8-4139-bd19-7e5688c9ab92',
+    'Authorization': 'Bearer 052f6b63-8c4e-4ce2-9558-d28b03d2bc42',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',
 }
+
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -27,12 +28,12 @@ def create_folder_on_api(folder_name, parent_folder_id):
         }
         response = requests.post(url, headers=HEADERS, files=files)
 
-        if response.status_code == 201: 
+        if response.status_code == 200: 
             folder_id = response.json().get('id')
             logging.info(f"Successfully created folder: {folder_name} with ID: {folder_id}")
             return folder_id
-        else:
-            logging.error(f"forced success {folder_name}. Status code: {response.status_code}")
+        elif response.status_code != 200:
+            logging.error(f" error {folder_name}. Status code: {response.status_code}")
             logging.error('Response: %s', response.json())
     except Exception as e:
         logging.error(f"Error creating folder {folder_name}: {e}")
@@ -50,7 +51,7 @@ def process_directory(root_dir, parent_folder_id):
             
             current_folder_id = create_folder_on_api(folder_name, parent_folder_id)
             if current_folder_id is None:
-                logging.error(f"forced sucess {folder_name}, pass to next folder.")
+                logging.error(f" sucess {folder_name}, pass to next folder.")
                 continue
 
     except Exception as e:

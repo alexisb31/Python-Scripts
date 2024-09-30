@@ -6,7 +6,7 @@ import pandas as pd
 # CONFIGURATION
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_/folders/' 
 HEADERS = {
-   'Authorization': 'Bearer 5d37ecb0-19fc-4003-bf6a-8e2994f15434',
+   'Authorization': 'Bearer 052f6b63-8c4e-4ce2-9558-d28b03d2bc42',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',
@@ -27,17 +27,21 @@ def get_folders_recursively(folder_id):
         data = response.json()
         folders = data.get('folders', [])
         
+        #déclaration valeur avant récursivité de la fonction
+
         for folder in folders:
             folder_id = folder['folder_id']
             folder_name = folder['name']
             folders_info.append({'ID': folder_id, 'Name': folder_name})
 
-            # Appel récursif pour parcourir les sous-dossiers
-            
+            # appel récursif de la fonction
+
             folders_info.extend(get_folders_recursively(folder_id))
     else:
         logging.error(f"Failed to retrieve folders. Status code: {response.status_code}")
         logging.error(f"Response: {response.json()}")
+    
+        
 
     return folders_info
 
@@ -48,6 +52,8 @@ def save_to_excel(folders_info):
         existing_df = pd.read_excel(FILE_NAME)
        
         new_df = pd.DataFrame(folders_info)
+
+        new_df = new_df[~new_df['ID'].isin(existing_df['ID'])]
      
         combined_df = pd.concat([existing_df, new_df]).drop_duplicates().reset_index(drop=True)
     else:
