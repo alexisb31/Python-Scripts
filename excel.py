@@ -14,7 +14,6 @@ HEADERS = {
 
 FILE_NAME = 'liste_dossierAPIDGP.xlsx'
 
-
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def get_folders_recursively(folder_id):
@@ -34,6 +33,7 @@ def get_folders_recursively(folder_id):
             folders_info.append({'ID': folder_id, 'Name': folder_name})
 
             # Appel récursif pour parcourir les sous-dossiers
+            
             folders_info.extend(get_folders_recursively(folder_id))
     else:
         logging.error(f"Failed to retrieve folders. Status code: {response.status_code}")
