@@ -4,8 +4,8 @@ import logging
 
 
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
-PARENT_FOLDER_ID = '167845dc55284853932133e02b15f8e7' 
-DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\CSI et ODQ\Scripts\ScriptAD_5-37'
+PARENT_FOLDER_ID = 'e0623905b94d4db1bfa926e9d60c290b' 
+DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\CSI et ODQ\Scripts\ScriptAD_5-40'
 HEADERS = {
     'Authorization': 'Bearer 46817345-1238-481b-b48f-549d7a39b716',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',
@@ -13,14 +13,11 @@ HEADERS = {
     'User-Agent': 'PostmanRuntime/7.40.0',
 }
 
-
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format=rf'%(asctime)s - %(levelname)s - %(message)s')
 
 def create_folder_on_api(folder_name, parent_folder_id):
     
-    try:
-       
+    try:       
         url = f'{API_URL_BASE}/folders'
         files = {
             'name': (None, folder_name),
@@ -51,7 +48,7 @@ def process_directory(root_dir, parent_folder_id):
             
             current_folder_id = create_folder_on_api(folder_name, parent_folder_id)
             if current_folder_id is None:
-                logging.error(f" sucess {folder_name}, pass to next folder.")
+                logging.info(f" sucess {folder_name}, pass to next folder.")
                 continue
 
     except Exception as e:
