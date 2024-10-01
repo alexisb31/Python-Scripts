@@ -20,16 +20,12 @@ LOG_FILE = 'uploaded_files.log'
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-
-
 def calculate_sha256(file_path):
     sha256_hash = hashlib.sha256()
     with open(file_path, "rb") as f:
         for byte_block in iter(lambda: f.read(4096), b""):
             sha256_hash.update(byte_block)
     return sha256_hash.hexdigest()
-
-
 
 def load_uploaded_files(log_file):
    
@@ -39,14 +35,11 @@ def load_uploaded_files(log_file):
     with open(log_file, 'r') as f:
         return set(line.strip() for line in f)
     
-
-
+    
 def save_uploaded_file(log_file, file_hash):
   
     with open(log_file, 'a') as f:
         f.write(f"{file_hash}\n")
-
-
 
 def upload_file(file_path, folder_id, uploaded_files):
     try:

@@ -2,12 +2,12 @@ import os
 import requests
 import logging
 
-# CONFIG
+
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
-PARENT_FOLDER_ID = '10ef3576633c4b53b58ea1c62841573b' 
-DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\CSI et ODQ\Scripts\ScriptAD_5-5'
+PARENT_FOLDER_ID = '167845dc55284853932133e02b15f8e7' 
+DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\CSI et ODQ\Scripts\ScriptAD_5-37'
 HEADERS = {
-    'Authorization': 'Bearer 052f6b63-8c4e-4ce2-9558-d28b03d2bc42',
+    'Authorization': 'Bearer 46817345-1238-481b-b48f-549d7a39b716',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',
