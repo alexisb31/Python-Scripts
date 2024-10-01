@@ -4,8 +4,8 @@ import logging
 
 
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
-PARENT_FOLDER_ID = 'e0623905b94d4db1bfa926e9d60c290b' 
-DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\CSI et ODQ\Scripts\ScriptAD_5-40'
+PARENT_FOLDER_ID = '16c3a384bd574c039290b51739f339b5' 
+DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\CSI et ODQ\Scripts\ScriptAZAD_1-3'
 HEADERS = {
     'Authorization': 'Bearer 46817345-1238-481b-b48f-549d7a39b716',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',
