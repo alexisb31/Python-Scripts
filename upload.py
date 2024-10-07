@@ -6,11 +6,11 @@ import logging
 
 # CONFIGURATION
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
-FOLDER_ID = '9188ea8d478d442ab91af4e461923bcf'
+FOLDER_ID = 'effcfb95159d49bbb0952deb5f2ea000'
 
-DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Books de crise (hors PCA)\SCTS\Ressources complémentaires\crise securité'
+DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\OneTech\SUPPORT MDQ\WIKIS\TRI'
 HEADERS = {
-    'Authorization': 'Bearer 079ff320-85d2-4550-872e-d33b2ffb695f',
+    'Authorization': 'Bearer f5a52503-71c6-4b22-b8a5-eda5151a9c12',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',  
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',
