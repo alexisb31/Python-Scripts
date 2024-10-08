@@ -8,12 +8,12 @@ from watchdog.events import FileSystemEventHandler
 
 import folder
 
-# CONFIGURATION
+
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
 FOLDER_ID = '9188ea8d478d442ab91af4e461923bcf'
 DIRECTORY_PATH = r'\\groupevsc.com\share\PCA'
 HEADERS = {
-    'Authorization': 'Bearer 079ff320-85d2-4550-872e-d33b2ffb695f',
+    'Authorization': 'Bearer e7ada115-46cf-4cab-b171-d4f024b51590',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',  
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',
@@ -59,8 +59,7 @@ def upload_file(file_path, folder_id):
         uploaded_files = get_uploaded_files(folder_id)
         if file_name in uploaded_files and uploaded_files[file_name] == file_hash:
             logging.info(f"Le fichier {file_name} est déjà uploadé.")
-            return
-
+            
         url = f"{API_URL_BASE}/documents?folder_id={folder_id}'"
         with open(file_path, 'rb') as file:
             files = {'file': file}
@@ -130,10 +129,12 @@ class ChangeHandler(FileSystemEventHandler):
     def on_deleted(self, event):
         delete_item(event.src_path)
 
-   
+
+
 
 if __name__ == "__main__":
     path = r'\\groupevsc.com\share\PCA'
+    hoper = folder.create_folder_on_api('PCA_', '1efff')
     event_handler = ChangeHandler()
     observer = Observer()
     observer.schedule(event_handler, path, recursive=True)

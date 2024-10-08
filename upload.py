@@ -6,11 +6,12 @@ import logging
 
 # CONFIGURATION
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
-FOLDER_ID = 'effcfb95159d49bbb0952deb5f2ea000'
+FOLDER_ID = 'e7e8e539d3fc46d2bc53ce77ee07f2dc'
 
-DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Documentation critique commune\Direction Tech\OneTech\SUPPORT MDQ\WIKIS\TRI'
+
+DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Books de crise (hors PCA)\SCTS'
 HEADERS = {
-    'Authorization': 'Bearer f5a52503-71c6-4b22-b8a5-eda5151a9c12',
+    'Authorization': 'Bearer 9561bf4b-596e-4219-8e85-c80d0dc6f43c',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',  
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',
@@ -35,6 +36,7 @@ def load_uploaded_files(log_file):
     with open(log_file, 'r') as f:
         return set(line.strip() for line in f)
     
+
     
 def save_uploaded_file(log_file, file_hash):
   
@@ -48,6 +50,7 @@ def upload_file(file_path, folder_id, uploaded_files):
         if file_hash in uploaded_files:
             logging.info(f"Déjà upload, téléchargement du fichier suivant : {os.path.basename(file_path)}")
             return
+
         file_size = os.path.getsize(file_path)
         file_name = os.path.basename(file_path)
         if file_name in ['.DS_Store', 'Thumbs.db'] or file_name.startswith('._'):
