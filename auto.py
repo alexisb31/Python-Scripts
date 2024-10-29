@@ -7,10 +7,10 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
-FOLDER_ID = 'a2889c256e524d618f66b90367cb9706'
+FOLDER_ID = '0e8e0d98b6db4cab95a42bec634972b0'
 DIRECTORY_PATH = r'\\groupevsc.com\share\PCA'
 HEADERS = {
-    'Authorization': 'Bearer dcee44f2-ba05-4cae-a647-970e03d5b5b6',
+    'Authorization': 'Bearer b9212009-18ad-43eb-905a-4f5c3a80a9d3',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',  
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',
@@ -32,7 +32,7 @@ def get_uploaded_files(folder_id):
     if response.status_code == 200:
         return {file['filename']: file['sha256'] for file in response.json()}
     else:
-        logging.error(f"Erreur récupération fichiers dossier {folder_id}: {response.status_code} - {response.text}")
+        logging.error(f"Erreur récupération  dossier {folder_id}: {response.status_code} - {response.text}")
         return {}
 
 def upload_file(file_path, folder_id):
