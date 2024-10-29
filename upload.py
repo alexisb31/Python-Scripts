@@ -6,12 +6,12 @@ import logging
 
 # CONFIGURATION
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
-FOLDER_ID = 'e7e8e539d3fc46d2bc53ce77ee07f2dc'
+FOLDER_ID = '9a98bba893c7404f84813351d1dfb5e1'
 
 
-DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Books de crise (hors PCA)\SCTS'
+DIRECTORY_PATH = r'\\groupevsc.com\share\PCA\Books de crise (hors PCA)\SCT\Ressources complémentaires\Organigrammes SNCF'
 HEADERS = {
-    'Authorization': 'Bearer 9561bf4b-596e-4219-8e85-c80d0dc6f43c',
+    'Authorization': 'Bearer c04392a6-c1de-4c25-ad9c-240ae1b5a4ca',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',  
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',
