@@ -13,6 +13,7 @@ HEADERS = {
     'User-Agent': 'PostmanRuntime/7.40.0',
 }
 
+
 logging.basicConfig(level=logging.INFO, format=rf'%(asctime)s - %(levelname)s - %(message)s')
 
 def create_folder_on_api(folder_name, parent_folder_id):
