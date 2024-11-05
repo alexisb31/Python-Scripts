@@ -3,19 +3,50 @@ import hashlib
 import logging
 import requests
 from datetime import datetime
+from base64 import b64encode
 
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
-FOLDER_ID = '9188ea8d478d442ab91af4e461923bcf'
+TOKEN_URL = 'https://api.laposte.fr/digiposte/v3/oauth/token'
+CLIENT_ID = 'sncf-pca'  
+CLIENT_SECRET = 'G4pCAy6Vp9i8'  
 DIRECTORY_PATH = r'\\groupevsc.com\share\PCA'
-HEADERS = {
-    'Authorization': 'Bearer 540a0d3e-7cfc-4b8b-99e1-e264be4eb5d5',
-    'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',  
-    'Accept': '*/*',
-    'User-Agent': 'PostmanRuntime/7.40.0',
-}
 LOG_FILE = 'uploaded_files.log'
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+def get_token():
+    auth_str = f"{CLIENT_ID}:{CLIENT_SECRET}"
+    b64_auth_str = b64encode(auth_str.encode()).decode()
+    headers = {
+        'Authorization': f'Basic {b64_auth_str}',
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    data = {
+        'grant_type': 'client_credentials'
+    }
+    logging.info(f"Requesting token with headers: {headers} and data: {data}")
+    response = requests.post(TOKEN_URL, headers=headers, data=data)
+    logging.info(f"Response Status Code: {response.status_code}")
+    logging.info(f"Response Text: {response.text}")
+    if response.status_code == 200:
+        token = response.json().get('access_token')
+        logging.info(f"Token generated successfully: {token}")
+        return token
+    else:
+        logging.error(f"Failed to generate token: {response.status_code} - {response.text}")
+        return None
+
+def get_headers():
+    token = get_token()
+    if token:
+        return {
+            'Authorization': f'Bearer {token}',
+            'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',  
+            'Accept': '*/*',
+            'User-Agent': 'PostmanRuntime/7.40.0',
+        }
+    else:
+        return None
 
 def get_file_modification_date(file_path):
     return datetime.fromtimestamp(os.path.getmtime(file_path))
@@ -30,10 +61,13 @@ def get_local_files(directory_path):
     return file_tree
 
 def get_uploaded_files(folder_id):
+    headers = get_headers()
+    if not headers:
+        return {}
     url = f"{API_URL_BASE}{folder_id}/documents"
-    response = requests.get(url, headers=HEADERS)
+    response = requests.get(url, headers=headers)
     logging.info(f"URL: {url}")
-    logging.info(f"Headers: {HEADERS}")
+    logging.info(f"Headers: {headers}")
     logging.info(f"Response Status Code: {response.status_code}")
     logging.info(f"Response Text: {response.text}")
     if response.status_code == 200:
@@ -62,14 +96,20 @@ def compare_trees(local_tree, api_tree):
     return changes
 
 def delete_file_from_api(filename, folder_id):
+    headers = get_headers()
+    if not headers:
+        return
     url = f"{API_URL_BASE}{folder_id}/documents/{filename}"
-    response = requests.delete(url, headers=HEADERS)
+    response = requests.delete(url, headers=headers)
     if response.status_code == 204:
         logging.info(f"Fichier supprimé avec succès: {filename}")
     else:
         logging.error(f"Erreur suppression fichier {filename}: {response.status_code} - {response.text}")
 
 def upload_file(file_path, folder_id):
+    headers = get_headers()
+    if not headers:
+        return
     filename = os.path.basename(file_path)
     if not filename:
         logging.error(f"Le fichier n'a pas de nom: {file_path}")
@@ -79,8 +119,8 @@ def upload_file(file_path, folder_id):
         return
     url = f"{API_URL_BASE}{folder_id}/documents"
     files = {'file': (filename, open(file_path, 'rb'))}
-    data = {'filename': filename}
-    response = requests.post(url, headers=HEADERS, files=files, data=data)
+    data = {'filename': filename, 'health': False}  # Correction du paramètre 'health' en booléen avec la valeur False
+    response = requests.post(url, headers=headers, files=files, data=data)
     if response.status_code == 201:
         logging.info(f"Fichier uploadé avec succès: {filename}")
     else:
@@ -105,4 +145,4 @@ def sync_files(directory_path, folder_id):
     apply_changes(changes, folder_id)
 
 if __name__ == "__main__":
-    sync_files(DIRECTORY_PATH, FOLDER_ID)
+    sync_files(DIRECTORY_PATH, folder_id="095de81fe2fb4cc48a8f2f790867a6f2")
