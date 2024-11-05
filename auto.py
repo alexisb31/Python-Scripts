@@ -1,4 +1,3 @@
-
 import os
 import hashlib
 import logging
@@ -9,7 +8,7 @@ API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
 FOLDER_ID = '9188ea8d478d442ab91af4e461923bcf'
 DIRECTORY_PATH = r'\\groupevsc.com\share\PCA'
 HEADERS = {
-    'Authorization': 'Bearer e1908848-c022-4ce4-8069-9c4db7ce8d30',
+    'Authorization': 'Bearer 540a0d3e-7cfc-4b8b-99e1-e264be4eb5d5',
     'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',  
     'Accept': '*/*',
     'User-Agent': 'PostmanRuntime/7.40.0',
@@ -80,7 +79,8 @@ def upload_file(file_path, folder_id):
         return
     url = f"{API_URL_BASE}{folder_id}/documents"
     files = {'file': (filename, open(file_path, 'rb'))}
-    response = requests.post(url, headers=HEADERS, files=files)
+    data = {'filename': filename}
+    response = requests.post(url, headers=HEADERS, files=files, data=data)
     if response.status_code == 201:
         logging.info(f"Fichier uploadé avec succès: {filename}")
     else:
