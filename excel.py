@@ -3,7 +3,8 @@ import requests
 import logging
 import pandas as pd
 
-# CONFIGURATION
+# CONFIG
+
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_/folders/' 
 HEADERS = {
    'Authorization': 'Bearer 0c8cce58-ec7b-4fb3-aa1c-5ff7a05bb5ef',
@@ -27,14 +28,14 @@ def get_folders_recursively(folder_id):
         data = response.json()
         folders = data.get('folders', [])
         
-        #déclaration valeur avant récur fonction
+        #décla valeur
 
         for folder in folders:
             folder_id = folder['folder_id']
             folder_name = folder['name']
             folders_info.append({'ID': folder_id, 'Name': folder_name})
 
-            # appel récursif de la fonction
+            # appel récursif 
 
             folders_info.extend(get_folders_recursively(folder_id))
     else:
