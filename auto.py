@@ -7,15 +7,15 @@ from base64 import b64encode
 
 API_URL_BASE = 'https://api.laposte.fr/digiposte/v3/partner/safes/PCA_'
 TOKEN_URL = 'https://api.laposte.fr/digiposte/v3/oauth/token'
-CLIENT_ID = 'sncf-pca'  
-CLIENT_SECRET = 'G4pCAy6Vp9i8'  
+USERNAME = 'sncf-pca'  
+PASSWORD = 'G4pCAy6Vp9i8'  
 DIRECTORY_PATH = r'\\groupevsc.com\share\PCA'
 LOG_FILE = 'uploaded_files.log'
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def get_token():
-    auth_str = f"{CLIENT_ID}:{CLIENT_SECRET}"
+def get_headers():
+    auth_str = f"{USERNAME}:{PASSWORD}"
     b64_auth_str = b64encode(auth_str.encode()).decode()
     headers = {
         'Authorization': f'Basic {b64_auth_str}',
@@ -24,21 +24,9 @@ def get_token():
     data = {
         'grant_type': 'client_credentials'
     }
-    logging.info(f"Requesting token with headers: {headers} and data: {data}")
     response = requests.post(TOKEN_URL, headers=headers, data=data)
-    logging.info(f"Response Status Code: {response.status_code}")
-    logging.info(f"Response Text: {response.text}")
     if response.status_code == 200:
         token = response.json().get('access_token')
-        logging.info(f"Token generated successfully: {token}")
-        return token
-    else:
-        logging.error(f"Failed to generate token: {response.status_code} - {response.text}")
-        return None
-
-def get_headers():
-    token = get_token()
-    if token:
         return {
             'Authorization': f'Bearer {token}',
             'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/',  
@@ -46,10 +34,18 @@ def get_headers():
             'User-Agent': 'PostmanRuntime/7.40.0',
         }
     else:
+        logging.error(f"Failed to generate token: {response.status_code} - {response.text}")
         return None
 
 def get_file_modification_date(file_path):
     return datetime.fromtimestamp(os.path.getmtime(file_path))
+
+def calculate_sha256(file_path):
+    sha256_hash = hashlib.sha256()
+    with open(file_path, "rb") as f:
+        for byte_block in iter(lambda: f.read(4096), b""):
+            sha256_hash.update(byte_block)
+    return sha256_hash.hexdigest()
 
 def get_local_files(directory_path):
     file_tree = {}
@@ -66,10 +62,6 @@ def get_uploaded_files(folder_id):
         return {}
     url = f"{API_URL_BASE}{folder_id}/documents"
     response = requests.get(url, headers=headers)
-    logging.info(f"URL: {url}")
-    logging.info(f"Headers: {headers}")
-    logging.info(f"Response Status Code: {response.status_code}")
-    logging.info(f"Response Text: {response.text}")
     if response.status_code == 200:
         return {file['filename']: datetime.strptime(file['last_modified'], '%Y-%m-%dT%H:%M:%S.%fZ') for file in response.json()}
     else:
@@ -117,9 +109,11 @@ def upload_file(file_path, folder_id):
     if filename.lower().endswith(('.db', '.ds_store')):
         logging.info(f"Upload bloqué pour le fichier: {filename}")
         return
+    file_size = os.path.getsize(file_path)
+    file_hash = calculate_sha256(file_path)
     url = f"{API_URL_BASE}{folder_id}/documents"
     files = {'file': (filename, open(file_path, 'rb'))}
-    data = {'filename': filename, 'health': False}  # Correction du paramètre 'health' en booléen avec la valeur False
+    data = {'filename': filename, 'size': file_size, 'hash': file_hash, 'health': False}  # Ajout du hash du fichier
     response = requests.post(url, headers=headers, files=files, data=data)
     if response.status_code == 201:
         logging.info(f"Fichier uploadé avec succès: {filename}")
