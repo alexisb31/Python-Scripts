@@ -19,7 +19,8 @@ def get_headers():
     b64_auth_str = b64encode(auth_str.encode()).decode()
     headers = {
         'Authorization': f'Basic {b64_auth_str}',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-Okapi-Key': 'LUwqbDs5ENNTMpt4TeTORtcyD4j8lgwiK7LZt7DEQhPUuESEgGJ5dy95z9bPadG/'
     }
     data = {
         'grant_type': 'client_credentials'
@@ -70,20 +71,20 @@ def get_uploaded_files(folder_id):
 
 def compare_trees(local_tree, api_tree):
     changes = {
-        'to_add': [],
-        'to_update': [],
-        'to_delete': []
+        'pour_ajt': [],
+        'pour_updt': [],
+        'to_supp': []
     }
 
     for file_name, local_date in local_tree.items():
         if file_name not in api_tree:
-            changes['to_add'].append(file_name)
+            changes['pour_ajt'].append(file_name)
         elif local_date > api_tree[file_name]:
-            changes['to_update'].append(file_name)
+            changes['pour_updt'].append(file_name)
 
     for file_name in api_tree:
         if file_name not in local_tree:
-            changes['to_delete'].append(file_name)
+            changes['pour_supp'].append(file_name)
 
     return changes
 
@@ -112,24 +113,24 @@ def upload_file(file_path, folder_id):
     file_size = os.path.getsize(file_path)
     file_hash = calculate_sha256(file_path)
     url = f"{API_URL_BASE}{folder_id}/documents"
-    files = {'file': (filename, open(file_path, 'rb'))}
-    data = {'filename': filename, 'size': file_size, 'hash': file_hash, 'health': False}  # Ajout du hash du fichier
-    response = requests.post(url, headers=headers, files=files, data=data)
+    file = {'file': (filename, open(file_path, 'rb'))}  # 
+    data = {'filename': filename, 'title': filename, 'size': file_size, 'hash': file_hash, 'health': False}  # Ajout du titre du fichier
+    response = requests.post(url, headers=headers, files=file, data=data)
     if response.status_code == 201:
         logging.info(f"Fichier uploadé avec succès: {filename}")
     else:
         logging.error(f"Erreur upload fichier {filename}: {response.status_code} - {response.text}")
 
 def apply_changes(changes, folder_id):
-    for file_name in changes['to_add']:
+    for file_name in changes['pour_ajt']:
         file_path = os.path.join(DIRECTORY_PATH, file_name)
         upload_file(file_path, folder_id)
     
-    for file_name in changes['to_update']:
+    for file_name in changes['pour_updt']:
         file_path = os.path.join(DIRECTORY_PATH, file_name)
         upload_file(file_path, folder_id)
     
-    for file_name in changes['to_delete']:
+    for file_name in changes['pour_supp']:
         delete_file_from_api(file_name, folder_id)
 
 def sync_files(directory_path, folder_id):
@@ -139,4 +140,8 @@ def sync_files(directory_path, folder_id):
     apply_changes(changes, folder_id)
 
 if __name__ == "__main__":
-    sync_files(DIRECTORY_PATH, folder_id="095de81fe2fb4cc48a8f2f790867a6f2")
+    folder_id = "095de81fe2fb4cc48a8f2f790867a6f2"
+    if not folder_id:
+        logging.error("l'id dossier n'est pas trouvé.")
+    else:
+        sync_files(DIRECTORY_PATH, folder_id)
